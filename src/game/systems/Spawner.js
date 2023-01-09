@@ -77,7 +77,11 @@ async function createZombie(animations, models) {
   zombie.scale.setScalar(size);
   zombie.children[1].castShadow = true;
 
-  zombie.position.set(Math.random() * 100, 0, Math.random() * 100);
+  let radius = 100;
+  let angle = Math.random() * Math.PI * 2;
+  let x = Math.cos(angle) * radius;
+  let z = Math.sin(angle) * radius;
+  zombie.position.set(x, 0, z);
 
 
   zombie.tick = (delta) => mixer.update(delta);
