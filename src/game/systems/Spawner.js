@@ -27,13 +27,9 @@ class Spawner {
     this.loop.updatables.push(zombie);
     this.scene.add(zombie);
   }
-  test() {
-    this.spawn();
-    return;
-  }
   tick() {
     if (this.clock.getElapsedTime() > this.nextSpawnTime) {
-      this.test();
+      this.spawn();
     }
   }
 }
@@ -77,14 +73,24 @@ async function createZombie(animations, models) {
   zombie.scale.setScalar(size);
   zombie.children[1].castShadow = true;
 
+
   let radius = 100;
   let angle = Math.random() * Math.PI * 2;
   let x = Math.cos(angle) * radius;
   let z = Math.sin(angle) * radius;
   zombie.position.set(x, 0, z);
+  zombie.lookAt(0, 0, 0);
 
 
-  zombie.tick = (delta) => mixer.update(delta);
+  zombie.tick = (delta) => {
+    if (radius > 3) {
+      radius = radius - (speed * delta);
+      let x = Math.cos(angle) * radius;
+      let z = Math.sin(angle) * radius;
+      zombie.position.set(x, 0, z);
+    }
+    mixer.update(delta);
+  };
   //moveAnimation.play();
   return zombie;
 }
