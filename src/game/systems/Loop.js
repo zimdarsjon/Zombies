@@ -11,13 +11,17 @@ class Loop {
     this.paused = false;
   }
   start() {
+    clock.start();
     this.renderer.setAnimationLoop(() => {
       this.tick();
       this.renderer.render(this.scene, this.camera);
     })
+    this.active = true;
   }
   stop() {
+    clock.stop();
     this.renderer.setAnimationLoop(null);
+    this.active = false;
   }
   tick() {
     const delta = clock.getDelta();

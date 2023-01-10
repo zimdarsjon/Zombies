@@ -3,7 +3,8 @@ import { AnimationMixer, Clock, Vector3, Quaternion, Euler, Matrix4 } from 'thre
 import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils';
 
 class Spawner {
-  constructor(scene, loop, animations, models) {
+  constructor(scene, loop, animations, models, kill) {
+    this.kill = kill;
     this.scene = scene;
     this.loop = loop;
     this.maxSpawnRate = 10;
@@ -23,7 +24,7 @@ class Spawner {
   }
   async spawn() {
     this.setNextSpawn();
-    let zombie = await createZombie(this.animations, this.models, this.scene);
+    let zombie = await createZombie(this.animations, this.models, this.scene, this.kill);
     this.loop.updatables.push(zombie);
     this.scene.add(zombie);
   }
@@ -34,7 +35,7 @@ class Spawner {
   }
 }
 
-async function createZombie(animations, models, scene) {
+async function createZombie(animations, models, scene, kill) {
   let zombie, animation, speed
   let size = 0.1;
 
@@ -47,7 +48,7 @@ async function createZombie(animations, models, scene) {
   if (randomAnimationInt === 0) {
     animation = animations.run;
     speed = 5;
-  } else if (randomAnimationInt === 1) {
+  } else if (randomAnimationInt === 1 || randomModelInt === 0) {
     animation = animations.walkone;
     speed = 3;
   } else if (randomAnimationInt === 2) {
@@ -61,7 +62,6 @@ async function createZombie(animations, models, scene) {
   // Load Model
   if (randomModelInt === 0) {
     zombie = SkeletonUtils.clone(models.woman);
-    zombie.rotation.set(null);
   } else if (randomModelInt === 1) {
     zombie = SkeletonUtils.clone(models.cop)
   } else if (randomModelInt === 2) {
@@ -89,6 +89,7 @@ async function createZombie(animations, models, scene) {
     zombie.health -=1;
     if (zombie.health <= 0) {
       console.log('Die')
+      kill();
       scene.remove(zombie);
     }
   }
@@ -103,23 +104,9 @@ async function createZombie(animations, models, scene) {
     mixer.update(delta);
   };
 
-
-
-  // if (zombie.rotation.x > 0) {
-  //   zombie.rotation.x = 0;
-  //   zombie.lookAt(0, 0, 0);
-  // }
-  // window.addEventListener('click', () => {
-  //   if (zombie.rotation.x > 0) {
-  //     zombie.rotation.x = 0;
-  //     zombie.lookAt(0, 0, 0);
-  //   }
-  //   zombie.lookAt(0, 0, 0);
-  // })
   zombie.position.x *= -1.0;
   zombie.position.y *= -1.0;
   zombie.applyMatrix4(new Matrix4().makeScale(-1.0, 1.0, 1.0));
-
 
   moveAnimation.play();
   setTimeout(() => {
@@ -132,7 +119,7 @@ async function createZombie(animations, models, scene) {
   return zombie;
 }
 
-async function createSpawner (scene, loop) {
+async function createSpawner (scene, loop, kill) {
   let loader = new FBXLoader();
   let animations = {
     run: await loader.loadAsync('/assets/fbx/run.fbx'),
@@ -146,7 +133,7 @@ async function createSpawner (scene, loop) {
     cop: await loader.loadAsync('/assets/fbx/cop.fbx'),
     soldier: await loader.loadAsync('/assets/fbx/soldier.fbx')
   }
-  const spawner = new Spawner(scene, loop, animations, models);
+  const spawner = new Spawner(scene, loop, animations, models, kill);
   return spawner;
 }
 
