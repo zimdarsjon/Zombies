@@ -32,10 +32,17 @@ canvas {
 .kills {
   position: absolute;
   background-color: rgba(255, 255, 255, 0);
-  width: 10%;
   height: 10px;
-  top: 10px;
-  right: 10px;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  font-size: x-large;
+  align-items: center;
+}
+
+#kills {
+  font-size: larger;
+  margin-right: 5px;
 }
 
 
@@ -127,4 +134,13 @@ form input {
 
 form input:focus {
   outline: none;
+}
+
+.crosshair {
+  position: absolute;
+  text-align: center;
+  top: 50vh;
+  left: 50%;
+  user-select: none;
+  cursor: none;
 }

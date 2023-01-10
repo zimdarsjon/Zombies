@@ -23,6 +23,7 @@ const UI = ({hp, kills, paused, game, over}) => {
       <div>
         <Health hp={hp} />
         <Kills kills={kills} />
+        <div className='crosshair'>+</div>
       </div>
       <div>
         {paused && <Pause kills={kills} game={game}/>}
