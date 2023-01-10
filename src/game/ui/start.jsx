@@ -4,12 +4,14 @@ const Start = ({game, updatePlay}) => {
 
   return (
   <div className='playScreen'>
-    <h3>Fog of the Dead</h3>
+    <div className='container'>
+    <h1>Fog of the Dead</h1>
     <button onClick={e => {
       e.preventDefault();
       game.start();
       updatePlay(true);
     }}>Play</button>
+    </div>
   </div>
   )
 }

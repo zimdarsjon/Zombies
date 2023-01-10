@@ -19,15 +19,16 @@ import { createCube } from './components/cube.js';
 
 let camera, controls, renderer, scene, loop, spawner, gun, cube, shooter, ui
 
-let health = 10;
+let health = 1;
 let paused = false;
 let kills = 0;
 
-let updateKillCount, updateHealthBar, updatePauseState
+let updateKillCount, updateHealthBar, updatePauseState, gameOver
 
 class Game {
-  constructor(container, updateHealth, updateKills, updatePause) {
+  constructor(container, updateHealth, updateKills, updatePause, updateOver) {
     updateHealthBar = updateHealth;
+    gameOver = updateOver;
     updateKillCount = updateKills;
     updatePauseState = updatePause;
     this.updatePauseState = updatePauseState;
@@ -57,7 +58,7 @@ class Game {
   }
   async init() {
     // Let spawner
-    spawner = await createSpawner(scene, loop, this.incrementKills);
+    spawner = await createSpawner(scene, loop, this.incrementKills, this.damagePlayer.bind(this));
     gun = await createGun(camera);
     camera.add(gun);
     scene.add(camera);
@@ -70,9 +71,13 @@ class Game {
       this.active = true;
     }, 100)
   }
-  stop() {
-    paused = true;
-    loop.stop();
+  restart() {
+    health = 10;
+    updateHealthBar(health);
+    kills = 0;
+    updateKillCount(kills);
+    gameOver(false);
+    this.start();
   }
   togglePause() {
     if (loop.active) {
@@ -88,6 +93,25 @@ class Game {
   incrementKills() {
     kills++;
     updateKillCount(kills);
+  }
+  damagePlayer() {
+    health--;
+    updateHealthBar(health);
+    if (health <= 0) {
+      gameOver(true);
+      loop.stop();
+      let newUpdatables = [];
+      loop.updatables.forEach(object => {
+        if (object.isZombie) {
+          object.dead = true;
+          scene.remove(object);
+        } else {
+          newUpdatables.push(object);
+        }
+      })
+      loop.updatables = newUpdatables;
+      this.active = false;
+    }
   }
 }
 

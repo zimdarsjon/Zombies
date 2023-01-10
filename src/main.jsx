@@ -4,11 +4,10 @@ import reactDOM from 'react-dom';
 import { render } from 'react-dom';
 import UI from './game/ui/ui.jsx';
 
-async function main(updateHealth, updateKills, updatePause) {
+async function main(updateHealth, updateKills, updatePause, updateOver) {
   const container = document.querySelector('#root');
-  const game = new Game(container, updateHealth, updateKills, updatePause);
+  const game = new Game(container, updateHealth, updateKills, updatePause, updateOver);
   await game.init();
-  //game.start();
   return game;
 }
 
@@ -21,10 +20,11 @@ const App = () => {
   let [active, updateActive] = useState(false);
   let [paused, updatePause] = useState(false);
   let [game, updateGame] = useState({});
+  let [over, updateOver] = useState(false);
 
   async function load() {
     if (!active) {
-      let newGame = await main(updateHealth, updateKills, updatePause).catch(err => console.log(err));
+      let newGame = await main(updateHealth, updateKills, updatePause, updateOver).catch(err => console.log(err));
       updateActive(true);
       updateGame(newGame);
     }
@@ -32,7 +32,7 @@ const App = () => {
   load();
 
   return (
-    <UI hp={health} kills={kills} paused={paused} game={game}/>
+    <UI hp={health} kills={kills} paused={paused} game={game} over={over}/>
   )
 }
 

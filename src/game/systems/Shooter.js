@@ -6,13 +6,14 @@ class Shooter {
     this.pointer = new Vector2();
     this.scene = scene;
     this.gun = gun;
+    this.game = game;
     this.camera = camera;
     this.bullets = [];
     this.emitter = new Object3D();
     this.emitter.position.set(3.5, -1.4, -5);
     camera.add(this.emitter);
     window.addEventListener('click', (e) => {
-      if (game.active) {
+      if (this.game.active) {
         this.shoot(e)
       }
     });
