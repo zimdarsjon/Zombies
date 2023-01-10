@@ -23,7 +23,7 @@ class Spawner {
   }
   async spawn() {
     this.setNextSpawn();
-    let zombie = await createZombie(this.animations, this.models);
+    let zombie = await createZombie(this.animations, this.models, this.scene);
     this.loop.updatables.push(zombie);
     this.scene.add(zombie);
   }
@@ -34,7 +34,7 @@ class Spawner {
   }
 }
 
-async function createZombie(animations, models) {
+async function createZombie(animations, models, scene) {
   let zombie, animation, speed
   let size = 0.1;
 
@@ -64,7 +64,7 @@ async function createZombie(animations, models) {
     zombie = SkeletonUtils.clone(models.cop)
   } else if (randomModelInt === 2) {
     zombie = SkeletonUtils.clone(models.girl)
-    size = 0.07;
+    size = 0.007;
   } else if (randomModelInt === 3) {
     zombie = SkeletonUtils.clone(models.soldier)
   }
@@ -81,6 +81,15 @@ async function createZombie(animations, models) {
   zombie.position.set(x, 0, z);
   zombie.lookAt(0, 0, 0);
 
+  zombie.health = 3;
+  zombie.isZombie = true;
+  zombie.damage = () => {
+    zombie.health -=1;
+    if (zombie.health <= 0) {
+      console.log('Die')
+      scene.remove(zombie);
+    }
+  }
 
   zombie.tick = (delta) => {
     if (radius > 3) {
