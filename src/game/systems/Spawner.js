@@ -1,12 +1,12 @@
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
-import { AnimationMixer, Clock, Vector3, Quaternion, Euler } from 'three';
+import { AnimationMixer, Clock, Vector3, Quaternion, Euler, Matrix4 } from 'three';
 import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils';
 
 class Spawner {
   constructor(scene, loop, animations, models) {
     this.scene = scene;
     this.loop = loop;
-    this.maxSpawnRate = 5;
+    this.maxSpawnRate = 10;
     this.nextSpawnTime = 0;
     this.clock = new Clock();
     this.clock.start();
@@ -38,6 +38,8 @@ async function createZombie(animations, models, scene) {
   let zombie, animation, speed
   let size = 0.1;
 
+  let loader = new FBXLoader();
+
   let randomAnimationInt = Math.floor(Math.random() * 4);
   let randomModelInt = Math.floor(Math.random() * 4);
 
@@ -64,7 +66,7 @@ async function createZombie(animations, models, scene) {
     zombie = SkeletonUtils.clone(models.cop)
   } else if (randomModelInt === 2) {
     zombie = SkeletonUtils.clone(models.girl)
-    size = 0.007;
+    size = 0.07;
   } else if (randomModelInt === 3) {
     zombie = SkeletonUtils.clone(models.soldier)
   }
@@ -100,7 +102,33 @@ async function createZombie(animations, models, scene) {
     }
     mixer.update(delta);
   };
-  //moveAnimation.play();
+
+
+
+  // if (zombie.rotation.x > 0) {
+  //   zombie.rotation.x = 0;
+  //   zombie.lookAt(0, 0, 0);
+  // }
+  // window.addEventListener('click', () => {
+  //   if (zombie.rotation.x > 0) {
+  //     zombie.rotation.x = 0;
+  //     zombie.lookAt(0, 0, 0);
+  //   }
+  //   zombie.lookAt(0, 0, 0);
+  // })
+  zombie.position.x *= -1.0;
+  zombie.position.y *= -1.0;
+  zombie.applyMatrix4(new Matrix4().makeScale(-1.0, 1.0, 1.0));
+
+
+  moveAnimation.play();
+  setTimeout(() => {
+    if (zombie.rotation.x > 0) {
+      zombie.rotation.x = 0;
+      zombie.lookAt(0, 0, 0);
+    }
+  }, 1000);
+  zombie.lookAt(0, 0, 0);
   return zombie;
 }
 
