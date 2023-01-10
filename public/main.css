@@ -41,4 +41,21 @@ canvas {
 .pauseScreen {
   position: absolute;
   margin: auto;
+  margin-left: 45%;
+  margin-top: 40vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.playScreen {
+  position: absolute;
+  margin: auto;
+  margin-left: 45%;
+  margin-top: 40vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }

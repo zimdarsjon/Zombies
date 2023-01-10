@@ -61,25 +61,28 @@ class Game {
     gun = await createGun(camera);
     camera.add(gun);
     scene.add(camera);
-    shooter = new Shooter(scene, camera, gun);
+    shooter = new Shooter(scene, camera, gun, this);
     loop.updatables.push(spawner, shooter);
   }
   start() {
-    paused = false;
     loop.start();
+    setTimeout(() => {
+      this.active = true;
+    }, 100)
   }
   stop() {
     paused = true;
     loop.stop();
   }
   togglePause() {
-    console.log('Pause')
     if (loop.active) {
       updatePauseState(true);
       loop.stop();
+      this.active = false;
     } else {
       loop.start();
       updatePauseState(false);
+      this.active = true;
     }
   }
   incrementKills() {

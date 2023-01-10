@@ -1,7 +1,7 @@
 import { SphereGeometry, Mesh, MeshBasicMaterial, Vector3, Object3D, Raycaster, Vector2, Quaternion } from 'three';
 
 class Shooter {
-  constructor(scene, camera, gun) {
+  constructor(scene, camera, gun, game) {
     this.raycaster = new Raycaster();
     this.pointer = new Vector2();
     this.scene = scene;
@@ -11,7 +11,11 @@ class Shooter {
     this.emitter = new Object3D();
     this.emitter.position.set(3.5, -1.4, -5);
     camera.add(this.emitter);
-    window.addEventListener('click', (e) => {this.shoot(e)});
+    window.addEventListener('click', (e) => {
+      if (game.active) {
+        this.shoot(e)
+      }
+    });
   }
   shoot(event) {
     // Check if paused

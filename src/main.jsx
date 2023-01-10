@@ -8,7 +8,7 @@ async function main(updateHealth, updateKills, updatePause) {
   const container = document.querySelector('#root');
   const game = new Game(container, updateHealth, updateKills, updatePause);
   await game.init();
-  game.start();
+  //game.start();
   return game;
 }
 
