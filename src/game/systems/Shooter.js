@@ -1,4 +1,4 @@
-import { SphereGeometry, Mesh, MeshBasicMaterial, Vector3, Object3D, Raycaster, Vector2, Quaternion } from 'three';
+import { SphereGeometry, Mesh, MeshBasicMaterial, Vector3, Object3D, Raycaster, Vector2, Quaternion, PointLight } from 'three';
 
 class Shooter {
   constructor(scene, camera, gun, game) {
@@ -19,20 +19,24 @@ class Shooter {
     });
   }
   shoot(event) {
-    // Check if paused
+
+    let audio = new Audio('assets/audio/gunshot.mp3');
+    audio.play();
+
     this.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 	  this.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
     this.raycaster.setFromCamera( this.pointer, this.camera);
     const intersects = this.raycaster.intersectObjects( this.scene.children );
 
     let bullet = new Mesh(
-      new SphereGeometry(0.5, 8, 8),
-      new MeshBasicMaterial({color: 'red'})
+      new SphereGeometry(0.2, 8, 8),
+      new MeshBasicMaterial({color: '#826400'}) //#5c5c5c
     )
     let bulletPosition = new Vector3();
     this.emitter.getWorldPosition(bulletPosition);
     bullet.position.copy(bulletPosition);
     bullet.lookAt(this.raycaster.ray.direction.multiplyScalar(1000))
+
     if (intersects.length > 0) {
       let intersect = intersects[0];
       if (intersect.object.parent.isZombie) {
@@ -41,9 +45,18 @@ class Shooter {
       }
     }
 
+    let light = new PointLight('#ffff82', 10, 1000 );
+    light.position.copy(bulletPosition);
+    this.scene.add(light);
+
+    setTimeout(() => {
+      this.scene.remove(light);
+    }, 100);
+
     setTimeout(() => {
       this.scene.remove(bullet);
     }, 5000);
+
     this.bullets.push(bullet);
     this.scene.add(bullet);
   }

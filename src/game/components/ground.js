@@ -1,12 +1,16 @@
-import { CircleGeometry, MeshStandardMaterial, Mesh } from 'three';
+import { Mesh, RepeatWrapping, MeshLambertMaterial, PlaneGeometry, TextureLoader } from 'three';
 
 function createGround() {
-  const geometry = new CircleGeometry(1000, 32);
-  const material = new MeshStandardMaterial({ color: '#0d1f10'});
-  const circle = new Mesh(geometry, material);
-  circle.rotation.x = - Math.PI / 2;
-  circle.receiveShadow = true;
-  return circle;
+  let texture = new TextureLoader().load('assets/images/darkgrass.jpeg');
+  texture.wrapS = RepeatWrapping;
+  texture.wrapT = RepeatWrapping;
+
+  texture.repeat.set(100, 100);
+
+  let material = new MeshLambertMaterial({ map: texture});
+  let plane = new Mesh(new PlaneGeometry(2000, 2000), material);
+  plane.rotation.x = - Math.PI / 2;
+  return plane;
 }
 
 export { createGround }

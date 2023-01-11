@@ -48,6 +48,7 @@ canvas {
   display: flex;
   font-size: x-large;
   align-items: center;
+  user-select: none;
 }
 
 #kills {
@@ -154,8 +155,8 @@ form input:focus {
 .crosshair {
   position: absolute;
   text-align: center;
-  top: 50vh;
-  left: 50%;
+  top: 49.9vh;
+  left: 49.9%;
   user-select: none;
   cursor: none;
 }

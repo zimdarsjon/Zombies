@@ -39,9 +39,7 @@ class Spawner {
 async function createZombie(animations, models, scene, kill, damagePlayer, loop) {
   let zombie, animation, speed
   let size = 0.1;
-
   let loader = new FBXLoader();
-
   let randomAnimationInt = Math.floor(Math.random() * 4);
   let randomModelInt = Math.floor(Math.random() * 3);
 
@@ -69,11 +67,14 @@ async function createZombie(animations, models, scene, kill, damagePlayer, loop)
   } else if (randomModelInt === 2) {
     zombie = SkeletonUtils.clone(models.soldier)
   }
+
+  // Rendering
   let mixer = new AnimationMixer(zombie);
   let moveAnimation = mixer.clipAction(animation.animations[0]);
   zombie.scale.setScalar(size);
   zombie.children[1].castShadow = true;
 
+  // Set Animations
   let attackAnimation, deathAnimation;
   if (speed === 3) {
     deathAnimation = mixer.clipAction(animations.crawldeath.animations[0]);
@@ -85,6 +86,7 @@ async function createZombie(animations, models, scene, kill, damagePlayer, loop)
   deathAnimation.repetitions = 0;
   deathAnimation.clampWhenFinished = true;
 
+  // Spawn Radius
   let radius = 600;
   let angle = Math.random() * Math.PI * 2;
   let x = Math.cos(angle) * radius;
@@ -92,6 +94,7 @@ async function createZombie(animations, models, scene, kill, damagePlayer, loop)
   zombie.position.set(x, 0, z);
   zombie.lookAt(0, 0, 0);
 
+  // Stats
   zombie.health = 3;
   zombie.isZombie = true;
 
@@ -119,6 +122,7 @@ async function createZombie(animations, models, scene, kill, damagePlayer, loop)
       }
     }
   }
+
   zombie.attack = () => {
     if (!zombie.dead) {
       damagePlayer();
@@ -127,6 +131,7 @@ async function createZombie(animations, models, scene, kill, damagePlayer, loop)
       }, 3833)
     }
   }
+
   zombie.tick = (delta) => {
     if ((radius > 10 && speed > 3) || (radius > 8)) {
       radius = radius - (speed * delta);
@@ -148,14 +153,16 @@ async function createZombie(animations, models, scene, kill, damagePlayer, loop)
         }, 1200)
       }
     }
+
     mixer.update(delta);
   };
 
   zombie.position.x *= -1.0;
   zombie.position.y *= -1.0;
   zombie.applyMatrix4(new Matrix4().makeScale(-1.0, 1.0, 1.0));
-
   moveAnimation.play();
+
+  // Fix Rotation Glitch
   setTimeout(() => {
     if (zombie.rotation.x > 0) {
       zombie.rotation.x = 0;
@@ -163,6 +170,7 @@ async function createZombie(animations, models, scene, kill, damagePlayer, loop)
     }
   }, 1000);
   zombie.lookAt(0, 0, 0);
+
   return zombie;
 }
 

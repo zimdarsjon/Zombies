@@ -6,7 +6,6 @@ import { Loop } from './systems/Loop.js';
 import { createSpawner } from './systems/spawner.js';
 import { createFirstPersonControls } from './systems/firstPersonControls.js';
 import { Shooter } from './systems/Shooter.js';
-import { Rain } from './systems/Rain.js';
 
 // Components
 import { createCamera } from './components/camera.js';
@@ -15,6 +14,7 @@ import { createGround } from './components/ground.js';
 import { createLights } from './components/lights.js';
 import { createGun } from './components/gun.js';
 import { createTrees } from './components/trees.js';
+import { createGrass } from './components/grass.js';
 
 // Remove
 import { createCube } from './components/cube.js';
@@ -26,6 +26,9 @@ let paused = false;
 let kills = 0;
 
 let updateKillCount, updateHealthBar, updatePauseState, gameOver
+
+let audio = new Audio('assets/audio/music.mp3');
+audio.loop = true;
 
 class Game {
   constructor(container, updateHealth, updateKills, updatePause, updateOver) {
@@ -45,7 +48,7 @@ class Game {
     scene.add(ground, moonLight, ambientLight);
 
     const resizer = new Resizer(container, camera, renderer, controls);
-    //const rain = new Rain(scene);
+
 
     loop = new Loop(camera, scene, renderer);
     loop.updatables.push(controls);
@@ -62,11 +65,18 @@ class Game {
   async init() {
     // Let spawner
     spawner = await createSpawner(scene, loop, this.incrementKills, this.damagePlayer.bind(this));
-    gun = await createGun(camera);
-    let trees = await createTrees(camera);
+
+    let trees = await createTrees();
     trees.forEach(tree => {
       scene.add(tree);
-    })
+    });
+
+    let grass = await createGrass();
+    grass.forEach(blade => {
+      scene.add(blade);
+    });
+
+    gun = await createGun(camera);
     camera.add(gun);
     scene.add(camera);
     shooter = new Shooter(scene, camera, gun, this);
@@ -77,6 +87,7 @@ class Game {
     setTimeout(() => {
       this.active = true;
     }, 100)
+    audio.play();
   }
   restart() {
     health = 10;
@@ -91,10 +102,12 @@ class Game {
       updatePauseState(true);
       loop.stop();
       this.active = false;
+      audio.pause();
     } else {
       loop.start();
       updatePauseState(false);
       this.active = true;
+      audio.play();
     }
   }
   incrementKills() {
@@ -105,9 +118,12 @@ class Game {
     if (!this.active) {
       return
     }
+    let grunt = new Audio('assets/audio/grunt.mp3');
+    grunt.play();
     health--;
     updateHealthBar(health);
     if (health <= 0) {
+      audio.pause();
       gameOver(true);
       loop.stop();
       let newUpdatables = [];
