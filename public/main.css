@@ -87,6 +87,11 @@ canvas {
   font-weight: bold;
 }
 
+.playScreen button:disabled:hover {
+  background-color: rgb(24, 18, 18);
+  font-weight: normal;
+}
+
 .playScreen .container, .pauseScreen .container, .gameover .container {
   display: flex;
   flex-direction: column;

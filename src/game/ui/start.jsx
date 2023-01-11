@@ -1,6 +1,7 @@
 import React from 'react';
 
-const Start = ({game, updatePlay}) => {
+const Start = ({game, updatePlay, active}) => {
+
 
   return (
   <div className='playScreen'>
@@ -10,7 +11,7 @@ const Start = ({game, updatePlay}) => {
       e.preventDefault();
       game.start();
       updatePlay(true);
-    }}>Play</button>
+    }} disabled={!active}>Play</button>
     </div>
   </div>
   )

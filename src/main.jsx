@@ -1,7 +1,6 @@
 import { Game } from './game/Game.js';
 import React from 'react';
-import reactDOM from 'react-dom';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import UI from './game/ui/ui.jsx';
 
 async function main(updateHealth, updateKills, updatePause, updateOver) {
@@ -32,9 +31,10 @@ const App = () => {
   load();
 
   return (
-    <UI hp={health} kills={kills} paused={paused} game={game} over={over}/>
+    <UI hp={health} kills={kills} paused={paused} game={game} over={over} active={active}/>
   )
 }
 
 const container = document.getElementById('ui');
-render(<App />, container);
+const root = createRoot(container);
+root.render(<App />);

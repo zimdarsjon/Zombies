@@ -8,7 +8,7 @@ const axios = require('axios');
 
 const { useEffect, useState } = React;
 
-const UI = ({hp, kills, paused, game, over}) => {
+const UI = ({hp, kills, paused, game, over, active}) => {
   let [play, updatePlay] = useState(false);
   let [scores, updateScores] = useState([]);
 
@@ -27,7 +27,7 @@ const UI = ({hp, kills, paused, game, over}) => {
       </div>
       <div>
         {paused && <Pause kills={kills} game={game}/>}
-        {!play && <Start game={game} updatePlay={updatePlay}/>}
+        {!play && <Start game={game} updatePlay={updatePlay} active={active}/>}
         {over && <Over kills={kills} game={game} scores={scores} updateScores={updateScores}/>}
       </div>
   </div>
