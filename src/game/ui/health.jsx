@@ -1,4 +1,5 @@
 import React from 'react';
+import { AiFillHeart } from 'react-icons/Ai';
 
 const { useEffect, useState } = React;
 
@@ -14,11 +15,16 @@ const Health = ({hp}) => {
   }, [hp])
 
   return (
-    <div className='healthbar'>
-      <div className='health' style={format}>
+    <>
+      <div className='healthbar'>
+        <div className='health' style={format}>
 
+        </div>
       </div>
-    </div>
+      <div className='heart'>
+        <AiFillHeart />
+      </div>
+    </>
   )
 }
 

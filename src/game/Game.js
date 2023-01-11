@@ -6,6 +6,7 @@ import { Loop } from './systems/Loop.js';
 import { createSpawner } from './systems/spawner.js';
 import { createFirstPersonControls } from './systems/firstPersonControls.js';
 import { Shooter } from './systems/Shooter.js';
+import { Rain } from './systems/Rain.js';
 
 // Components
 import { createCamera } from './components/camera.js';
@@ -13,13 +14,14 @@ import { createScene } from './components/scene.js';
 import { createGround } from './components/ground.js';
 import { createLights } from './components/lights.js';
 import { createGun } from './components/gun.js';
+import { createTrees } from './components/trees.js';
 
 // Remove
 import { createCube } from './components/cube.js';
 
 let camera, controls, renderer, scene, loop, spawner, gun, cube, shooter, ui
 
-let health = 1;
+let health = 10;
 let paused = false;
 let kills = 0;
 
@@ -43,6 +45,7 @@ class Game {
     scene.add(ground, moonLight, ambientLight);
 
     const resizer = new Resizer(container, camera, renderer, controls);
+    //const rain = new Rain(scene);
 
     loop = new Loop(camera, scene, renderer);
     loop.updatables.push(controls);
@@ -60,6 +63,10 @@ class Game {
     // Let spawner
     spawner = await createSpawner(scene, loop, this.incrementKills, this.damagePlayer.bind(this));
     gun = await createGun(camera);
+    let trees = await createTrees(camera);
+    trees.forEach(tree => {
+      scene.add(tree);
+    })
     camera.add(gun);
     scene.add(camera);
     shooter = new Shooter(scene, camera, gun, this);
@@ -95,6 +102,9 @@ class Game {
     updateKillCount(kills);
   }
   damagePlayer() {
+    if (!this.active) {
+      return
+    }
     health--;
     updateHealthBar(health);
     if (health <= 0) {

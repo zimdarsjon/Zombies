@@ -19,7 +19,7 @@ class Spawner {
   setNextSpawn() {
     let timeout = Math.random() * this.maxSpawnRate;
     this.nextSpawnTime = this.clock.getElapsedTime() + timeout;
-    if (this.maxSpawnRate > 1) {
+    if (this.maxSpawnRate > 0.1) {
       this.maxSpawnRate -= 0.05;
     }
   }
@@ -48,16 +48,16 @@ async function createZombie(animations, models, scene, kill, damagePlayer, loop)
   // Load Animzation
   if (randomAnimationInt === 0) {
     animation = animations.run;
-    speed = 5;
+    speed = 16;
   } else if (randomAnimationInt === 1) {
     animation = animations.walkone;
-    speed = 3;
+    speed = 5;
   } else if (randomAnimationInt === 2) {
     animation = animations.walktwo;
-    speed = 3;
+    speed = 5;
   } else if (randomAnimationInt === 3) {
     animation = animations.crawl;
-    speed = 1;
+    speed = 3;
   }
 
   // Load Model
@@ -75,8 +75,7 @@ async function createZombie(animations, models, scene, kill, damagePlayer, loop)
   zombie.children[1].castShadow = true;
 
   let attackAnimation, deathAnimation;
-  if (speed === 1) {
-    // Find Crawl Attack
+  if (speed === 3) {
     deathAnimation = mixer.clipAction(animations.crawldeath.animations[0]);
     attackAnimation = mixer.clipAction(animations.bite.animations[0]);
   } else {
@@ -86,7 +85,7 @@ async function createZombie(animations, models, scene, kill, damagePlayer, loop)
   deathAnimation.repetitions = 0;
   deathAnimation.clampWhenFinished = true;
 
-  let radius = 100;
+  let radius = 600;
   let angle = Math.random() * Math.PI * 2;
   let x = Math.cos(angle) * radius;
   let z = Math.sin(angle) * radius;
@@ -129,7 +128,7 @@ async function createZombie(animations, models, scene, kill, damagePlayer, loop)
     }
   }
   zombie.tick = (delta) => {
-    if ((radius > 10 && speed > 1) || (radius > 8)) {
+    if ((radius > 10 && speed > 3) || (radius > 8)) {
       radius = radius - (speed * delta);
       let x = Math.cos(angle) * radius;
       let z = Math.sin(angle) * radius;

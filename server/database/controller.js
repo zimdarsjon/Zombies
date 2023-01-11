@@ -1,6 +1,5 @@
 const scoreModel = require('./db.js');
 
-console.log(scoreModel.find);
 
 const saveScore = (req, res) => {
   let newScore = new scoreModel(req.query);
