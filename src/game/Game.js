@@ -57,14 +57,9 @@ class Game {
       if (event.key === 'Escape') {
         this.togglePause();
       }
-      if (event.key === ' ') {
-        this.damagePlayer();
-        updateKillCount(5);
-      }
     })
   }
   async init() {
-    // Let spawner
     spawner = await createSpawner(scene, loop, this.incrementKills, this.damagePlayer.bind(this));
 
     let trees = await createTrees();
