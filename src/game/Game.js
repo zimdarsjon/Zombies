@@ -28,6 +28,7 @@ let kills = 0;
 let updateKillCount, updateHealthBar, updatePauseState, gameOver
 
 let audio = new Audio('assets/audio/music.mp3');
+audio.volume = 0.1;
 audio.loop = true;
 
 class Game {
@@ -37,6 +38,7 @@ class Game {
     updateKillCount = updateKills;
     updatePauseState = updatePause;
     this.updatePauseState = updatePauseState;
+    this.playing = false;
     camera = createCamera();
     scene = createScene();
     renderer = createRenderer();
@@ -57,8 +59,13 @@ class Game {
 
     // Pause Game
     window.addEventListener('keydown', (event) => {
+      console.log(event.key)
       if (event.key === 'Escape') {
         this.togglePause();
+      }
+      if (event.key === ' ') {
+        this.damagePlayer();
+        updateKillCount(5);
       }
     })
   }
@@ -83,6 +90,7 @@ class Game {
     loop.updatables.push(spawner, shooter);
   }
   start() {
+    this.playing = true;
     loop.start();
     setTimeout(() => {
       this.active = true;
@@ -98,15 +106,28 @@ class Game {
     this.start();
   }
   togglePause() {
+    if (!this.playing) {
+      return;
+    }
     if (loop.active) {
       updatePauseState(true);
       loop.stop();
       this.active = false;
       audio.pause();
+      loop.updatables.forEach(object => {
+        if (object.isZombie) {
+          object.audio.pause();
+        }
+      })
     } else {
       loop.start();
       updatePauseState(false);
       this.active = true;
+      loop.updatables.forEach(object => {
+        if (object.isZombie) {
+          object.audio.play();
+        }
+      })
       audio.play();
     }
   }
@@ -119,10 +140,12 @@ class Game {
       return
     }
     let grunt = new Audio('assets/audio/grunt.mp3');
+    grunt.volume = 0.3;
     grunt.play();
     health--;
     updateHealthBar(health);
     if (health <= 0) {
+      this.playing = false;
       audio.pause();
       gameOver(true);
       loop.stop();
@@ -130,6 +153,7 @@ class Game {
       loop.updatables.forEach(object => {
         if (object.isZombie) {
           object.dead = true;
+          object.audio.pause();
           scene.remove(object);
         } else {
           newUpdatables.push(object);

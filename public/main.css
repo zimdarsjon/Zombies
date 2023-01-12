@@ -1,3 +1,7 @@
+* {
+  font-family: 'Nosifer', cursive;
+}
+
 body {
   margin: 0
 }
@@ -35,6 +39,7 @@ canvas {
   position: absolute;
   color: rgb(145, 25, 25);
   bottom: 4px;
+  font-family:'Times New Roman', Times, serif;
   left: 22%;
   font-size: x-large;
 }
@@ -58,6 +63,7 @@ canvas {
 
 
 .playScreen, .pauseScreen, .gameover {
+  font-family: 'Rubik', sans-serif;
   position: absolute;
   margin: auto;
   display: flex;
@@ -77,9 +83,9 @@ canvas {
   margin-left: auto;
   height: 5vh;
   background-color: rgb(24, 18, 18);
-  border: 5px rgb(145, 25, 25) solid;
+  border: 2px rgb(145, 25, 25) solid;
   color: rgb(145, 25, 25);
-  border-radius: 10px;
+  border-radius: 2px;
   margin-bottom: 5px;
 }
 
@@ -103,7 +109,7 @@ canvas {
   margin-left: auto;
   padding: 5px;
   border: 5px rgb(145, 25, 25) solid;
-  border-radius: 15px;
+  border-radius: 5px;
 }
 
 .scores .scoreheader{
@@ -159,4 +165,9 @@ form input:focus {
   left: 49.9%;
   user-select: none;
   cursor: none;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.gameover .container .restart {
+  margin-top: 30px;
 }

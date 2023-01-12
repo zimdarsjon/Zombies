@@ -19,7 +19,7 @@ class Spawner {
   setNextSpawn() {
     let timeout = Math.random() * this.maxSpawnRate;
     this.nextSpawnTime = this.clock.getElapsedTime() + timeout;
-    if (this.maxSpawnRate > 0.1) {
+    if (this.maxSpawnRate > 1) {
       this.maxSpawnRate -= 0.05;
     }
   }
@@ -102,6 +102,7 @@ async function createZombie(animations, models, scene, kill, damagePlayer, loop)
     zombie.health -= 1;
     if (zombie.health <= 0) {
       if (!zombie.dead) {
+        zombie.audio.pause();
         if (zombie.attacking) {
           attackAnimation.fadeOut(2);
         } else {
@@ -132,7 +133,16 @@ async function createZombie(animations, models, scene, kill, damagePlayer, loop)
     }
   }
 
+  // Audio
+  zombie.audio = new Audio('assets/audio/zombie.mp3');
+  zombie.audio.volume = 0;
+  zombie.audio.loop = true;
+  zombie.audio.play();
+
   zombie.tick = (delta) => {
+    if (radius < 75) {
+      zombie.audio.volume = (75 - radius) / 75 * 0.05
+    }
     if ((radius > 10 && speed > 3) || (radius > 8)) {
       radius = radius - (speed * delta);
       let x = Math.cos(angle) * radius;

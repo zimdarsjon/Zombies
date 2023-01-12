@@ -21,6 +21,7 @@ class Shooter {
   shoot(event) {
 
     let audio = new Audio('assets/audio/gunshot.mp3');
+    audio.volume = 0.1;
     audio.play();
 
     this.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -30,7 +31,7 @@ class Shooter {
 
     let bullet = new Mesh(
       new SphereGeometry(0.2, 8, 8),
-      new MeshBasicMaterial({color: '#826400'}) //#5c5c5c
+      new MeshBasicMaterial({color: 'black'}) //#5c5c5c #826400
     )
     let bulletPosition = new Vector3();
     this.emitter.getWorldPosition(bulletPosition);

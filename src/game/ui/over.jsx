@@ -19,17 +19,9 @@ const Over = ({kills, game, scores, updateScores}) => {
   return (
     <div className='gameover'>
       <div className='container'>
-      <h2>Game Over</h2>
-      <h3>Score: {kills}</h3>
-      <button onClick={e => {
-        e.preventDefault();
-        game.restart();
-      }}>Restart</button>
-
-      <Scores scores={scores}/>
       {submit &&
       <form>
-        <h3>New High Score</h3>
+        <h1>New High Score!</h1>
         <input type='text' onChange={e => {
           updateName(e.target.value);
         }}></input>
@@ -41,6 +33,13 @@ const Over = ({kills, game, scores, updateScores}) => {
         }}>Submit</button>
       </form>
       }
+      <h1>Game Over</h1>
+      <h3>Score: {kills}</h3>
+      <Scores scores={scores}/>
+      <button className='restart' onClick={e => {
+        e.preventDefault();
+        game.restart();
+      }}>Restart</button>
       </div>
     </div>
   )
