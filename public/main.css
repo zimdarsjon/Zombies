@@ -58,6 +58,7 @@ canvas {
 
 #kills {
   font-size: larger;
+  margin-top: 35px;
   margin-right: 5px;
 }
 
@@ -110,6 +111,8 @@ canvas {
   padding: 5px;
   border: 5px rgb(145, 25, 25) solid;
   border-radius: 5px;
+  margin-bottom: auto;
+  margin-top: auto;
 }
 
 .scores .scoreheader{

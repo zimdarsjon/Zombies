@@ -31,7 +31,7 @@ class Shooter {
 
     let bullet = new Mesh(
       new SphereGeometry(0.2, 8, 8),
-      new MeshBasicMaterial({color: 'black'}) //#5c5c5c #826400
+      new MeshBasicMaterial({color: 'black'})
     )
     let bulletPosition = new Vector3();
     this.emitter.getWorldPosition(bulletPosition);

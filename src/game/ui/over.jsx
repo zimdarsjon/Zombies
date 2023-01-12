@@ -18,8 +18,8 @@ const Over = ({kills, game, scores, updateScores}) => {
 
   return (
     <div className='gameover'>
-      <div className='container'>
       {submit &&
+      <div className='container'>
       <form>
         <h1>New High Score!</h1>
         <input type='text' onChange={e => {
@@ -27,12 +27,17 @@ const Over = ({kills, game, scores, updateScores}) => {
         }}></input>
         <button onClick={e => {
           e.preventDefault();
+          if (name === '') {
+            return;
+          }
           axios.post('/score', null, {params: {score: kills, name}})
             .then(res => updateScores(res.data));
           updateSubmit(false);
         }}>Submit</button>
       </form>
+      </div>
       }
+      <div className='container'>
       <h1>Game Over</h1>
       <h3>Score: {kills}</h3>
       <Scores scores={scores}/>

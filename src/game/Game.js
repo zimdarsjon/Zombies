@@ -1,5 +1,4 @@
 // Systems
-import { createControls } from './systems/controls.js';
 import { createRenderer } from './systems/renderer.js';
 import { Resizer } from './systems/Resizer.js';
 import { Loop } from './systems/Loop.js';
@@ -16,17 +15,12 @@ import { createGun } from './components/gun.js';
 import { createTrees } from './components/trees.js';
 import { createGrass } from './components/grass.js';
 
-// Remove
-import { createCube } from './components/cube.js';
-
+// Global Variables
 let camera, controls, renderer, scene, loop, spawner, gun, cube, shooter, ui
-
+let updateKillCount, updateHealthBar, updatePauseState, gameOver
 let health = 10;
 let paused = false;
 let kills = 0;
-
-let updateKillCount, updateHealthBar, updatePauseState, gameOver
-
 let audio = new Audio('assets/audio/music.mp3');
 audio.volume = 0.1;
 audio.loop = true;

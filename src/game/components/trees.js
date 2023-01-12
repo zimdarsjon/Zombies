@@ -10,11 +10,10 @@ async function createTrees() {
   tree.position.set(0, 0, -200);
   tree.scale.setScalar(1);
   tree.castShadow = true;
-  //results.push(tree);
 
   while (results.length < 40) {
     tree = tree.clone();
-    tree.position.set(randomCoord(), 0, randomCoord());
+    tree.position.set(randomCoord(), -2, randomCoord());
     tree.scale.setScalar(randomScale());
     tree.rotation.y = Math.random() * Math.PI;
     results.push(tree)
